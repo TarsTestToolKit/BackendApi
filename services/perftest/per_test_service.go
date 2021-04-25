@@ -10,16 +10,16 @@ import (
 	"github.com/TarsCloud/TarsGo/tars"
 	jsoniter "github.com/json-iterator/go"
 
-	"github.com/franklee0817/t3k/backend/client/benchmark"
-	"github.com/franklee0817/t3k/backend/client/tarsweb"
-	"github.com/franklee0817/t3k/backend/constants"
-	"github.com/franklee0817/t3k/backend/constants/errors"
-	"github.com/franklee0817/t3k/backend/models/mysql"
-	"github.com/franklee0817/t3k/backend/services/stats"
-	"github.com/franklee0817/t3k/backend/tars-protocol/apitars"
-	"github.com/franklee0817/t3k/backend/tars-protocol/bm"
-	"github.com/franklee0817/t3k/backend/tools"
-	"github.com/franklee0817/t3k/backend/tools/communicator"
+	"github.com/TarsTestToolKit/BackendApi/client/benchmark"
+	"github.com/TarsTestToolKit/BackendApi/client/tarsweb"
+	"github.com/TarsTestToolKit/BackendApi/constants"
+	"github.com/TarsTestToolKit/BackendApi/constants/errors"
+	"github.com/TarsTestToolKit/BackendApi/models/mysql"
+	"github.com/TarsTestToolKit/BackendApi/services/stats"
+	"github.com/TarsTestToolKit/BackendApi/tars-protocol/apitars"
+	"github.com/TarsTestToolKit/BackendApi/tars-protocol/bm"
+	"github.com/TarsTestToolKit/BackendApi/tools"
+	"github.com/TarsTestToolKit/BackendApi/tools/communicator"
 )
 
 // DoFuncTest 执行性能测试

@@ -3,9 +3,9 @@ package impl
 import (
 	"context"
 
-	"github.com/franklee0817/t3k/backend/services/functest"
-	"github.com/franklee0817/t3k/backend/services/perftest"
-	"github.com/franklee0817/t3k/backend/tars-protocol/apitars"
+	"github.com/TarsTestToolKit/BackendApi/services/functest"
+	"github.com/TarsTestToolKit/BackendApi/services/perftest"
+	"github.com/TarsTestToolKit/BackendApi/tars-protocol/apitars"
 )
 
 // APIImpl servant implementation

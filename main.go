@@ -6,11 +6,11 @@ import (
 
 	"github.com/TarsCloud/TarsGo/tars"
 
-	"github.com/franklee0817/t3k/backend/controllers"
-	"github.com/franklee0817/t3k/backend/impl"
-	"github.com/franklee0817/t3k/backend/tars-protocol/apitars"
+	"github.com/TarsTestToolKit/BackendApi/controllers"
+	"github.com/TarsTestToolKit/BackendApi/impl"
+	"github.com/TarsTestToolKit/BackendApi/tars-protocol/apitars"
 
-	_ "github.com/franklee0817/t3k/backend/config"
+	_ "github.com/TarsTestToolKit/BackendApi/config"
 )
 
 func main() {

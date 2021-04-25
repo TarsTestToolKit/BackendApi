@@ -4,9 +4,9 @@ import (
 	"context"
 	"sync"
 
-	"github.com/franklee0817/t3k/backend/client/benchmark"
-	"github.com/franklee0817/t3k/backend/data"
-	"github.com/franklee0817/t3k/backend/tars-protocol/apitars"
+	"github.com/TarsTestToolKit/BackendApi/client/benchmark"
+	"github.com/TarsTestToolKit/BackendApi/data"
+	"github.com/TarsTestToolKit/BackendApi/tars-protocol/apitars"
 )
 
 // DoFuncTest 执行功能性测试

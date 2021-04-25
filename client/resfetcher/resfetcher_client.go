@@ -5,8 +5,8 @@ import (
 
 	fetchertars "github.com/franklee0817/t3k/fetcher/tars-protocol/TarsTestToolKit"
 
-	"github.com/franklee0817/t3k/backend/constants"
-	"github.com/franklee0817/t3k/backend/tools/communicator"
+	"github.com/TarsTestToolKit/BackendApi/constants"
+	"github.com/TarsTestToolKit/BackendApi/tools/communicator"
 )
 
 const (

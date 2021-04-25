@@ -6,7 +6,7 @@ import (
 
 	jsoniter "github.com/json-iterator/go"
 
-	"github.com/franklee0817/t3k/backend/tars-protocol/apitars"
+	"github.com/TarsTestToolKit/BackendApi/tars-protocol/apitars"
 )
 
 // HandleDoPerfTest app.DoPerfTest http handler

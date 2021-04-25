@@ -5,7 +5,7 @@ import (
 
 	"xorm.io/xorm"
 
-	"github.com/franklee0817/t3k/backend/config"
+	"github.com/TarsTestToolKit/BackendApi/config"
 )
 
 func newSession(cfgName string) (*xorm.Session, error) {

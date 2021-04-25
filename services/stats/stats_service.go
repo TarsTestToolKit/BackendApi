@@ -6,8 +6,8 @@ import (
 
 	"github.com/TarsCloud/TarsGo/tars"
 
-	"github.com/franklee0817/t3k/backend/client/resfetcher"
-	"github.com/franklee0817/t3k/backend/models/mysql"
+	"github.com/TarsTestToolKit/BackendApi/client/resfetcher"
+	"github.com/TarsTestToolKit/BackendApi/models/mysql"
 )
 
 // CollectStats 采集资源使用信息

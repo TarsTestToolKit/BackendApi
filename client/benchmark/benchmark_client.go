@@ -5,10 +5,10 @@ import (
 
 	"github.com/TarsCloud/TarsGo/tars"
 
-	"github.com/franklee0817/t3k/backend/constants"
-	"github.com/franklee0817/t3k/backend/constants/errors"
-	"github.com/franklee0817/t3k/backend/tars-protocol/bm"
-	"github.com/franklee0817/t3k/backend/tools/communicator"
+	"github.com/TarsTestToolKit/BackendApi/constants"
+	"github.com/TarsTestToolKit/BackendApi/constants/errors"
+	"github.com/TarsTestToolKit/BackendApi/tars-protocol/bm"
+	"github.com/TarsTestToolKit/BackendApi/tools/communicator"
 )
 
 func getAdminApp() *bm.Admin {

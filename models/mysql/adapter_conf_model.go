@@ -5,7 +5,7 @@ import (
 
 	"github.com/TarsCloud/TarsGo/tars"
 
-	"github.com/franklee0817/t3k/backend/constants/errors"
+	"github.com/TarsTestToolKit/BackendApi/constants/errors"
 )
 
 // AdapterConf tars数据库的微服务运行时配置表

@@ -13,10 +13,10 @@ import (
 	"github.com/TarsCloud/TarsGo/tars"
 	jsoniter "github.com/json-iterator/go"
 
-	"github.com/franklee0817/t3k/backend/config"
-	"github.com/franklee0817/t3k/backend/constants"
-	"github.com/franklee0817/t3k/backend/constants/errors"
-	"github.com/franklee0817/t3k/backend/data"
+	"github.com/TarsTestToolKit/BackendApi/config"
+	"github.com/TarsTestToolKit/BackendApi/constants"
+	"github.com/TarsTestToolKit/BackendApi/constants/errors"
+	"github.com/TarsTestToolKit/BackendApi/data"
 )
 
 type servCache struct {

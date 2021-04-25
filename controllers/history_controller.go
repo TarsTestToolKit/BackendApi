@@ -9,8 +9,8 @@ import (
 	"github.com/TarsCloud/TarsGo/tars"
 	jsoniter "github.com/json-iterator/go"
 
-	"github.com/franklee0817/t3k/backend/constants/errors"
-	"github.com/franklee0817/t3k/backend/tars-protocol/apitars"
+	"github.com/TarsTestToolKit/BackendApi/constants/errors"
+	"github.com/TarsTestToolKit/BackendApi/tars-protocol/apitars"
 )
 
 func readIntFromQuery(req *http.Request, name string, required bool) (int, error) {
