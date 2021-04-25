@@ -4,6 +4,7 @@ go 1.14
 
 require (
 	github.com/TarsCloud/TarsGo v1.1.6
+	github.com/TarsTestToolKit/ResFetcher v0.0.0
 	github.com/go-sql-driver/mysql v1.5.0
 	github.com/json-iterator/go v1.1.10
 	github.com/kr/pretty v0.2.1 // indirect

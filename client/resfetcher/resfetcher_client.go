@@ -3,7 +3,7 @@ package resfetcher
 import (
 	"fmt"
 
-	fetchertars "github.com/franklee0817/t3k/fetcher/tars-protocol/TarsTestToolKit"
+	fetchertars "github.com/TarsTestToolKit/ResFetcher/tars-protocol/ResFetcher"
 
 	"github.com/TarsTestToolKit/BackendApi/constants"
 	"github.com/TarsTestToolKit/BackendApi/tools/communicator"
