@@ -398,14 +398,14 @@ func (st *FuncTestResp) WriteBlock(_os *codec.Buffer, tag byte) error {
 
 // PerfTestReq struct implement
 type PerfTestReq struct {
-	Lang       string `json:"lang"`
-	ServType   string `json:"servType"`
-	ThreadCnt  uint32 `json:"threadCnt"`
-	Cores      uint32 `json:"cores"`
-	ConnCnt    uint32 `json:"connCnt"`
-	ReqFreq    uint32 `json:"reqFreq"`
-	KeepAlive  uint32 `json:"keepAlive"`
-	PackageLen uint32 `json:"packageLen"`
+	Lang      string `json:"lang"`
+	ServType  string `json:"servType"`
+	Threads   uint32 `json:"threads"`
+	Cores     uint32 `json:"cores"`
+	ConnCnt   uint32 `json:"connCnt"`
+	ReqFreq   uint32 `json:"reqFreq"`
+	KeepAlive uint32 `json:"keepAlive"`
+	PkgLen    uint32 `json:"pkgLen"`
 }
 
 func (st *PerfTestReq) ResetDefault() {
@@ -429,7 +429,7 @@ func (st *PerfTestReq) ReadFrom(_is *codec.Reader) error {
 		return err
 	}
 
-	err = _is.Read_uint32(&st.ThreadCnt, 2, true)
+	err = _is.Read_uint32(&st.Threads, 2, true)
 	if err != nil {
 		return err
 	}
@@ -454,7 +454,7 @@ func (st *PerfTestReq) ReadFrom(_is *codec.Reader) error {
 		return err
 	}
 
-	err = _is.Read_uint32(&st.PackageLen, 7, true)
+	err = _is.Read_uint32(&st.PkgLen, 7, true)
 	if err != nil {
 		return err
 	}
@@ -510,7 +510,7 @@ func (st *PerfTestReq) WriteTo(_os *codec.Buffer) error {
 		return err
 	}
 
-	err = _os.Write_uint32(st.ThreadCnt, 2)
+	err = _os.Write_uint32(st.Threads, 2)
 	if err != nil {
 		return err
 	}
@@ -535,7 +535,7 @@ func (st *PerfTestReq) WriteTo(_os *codec.Buffer) error {
 		return err
 	}
 
-	err = _os.Write_uint32(st.PackageLen, 7)
+	err = _os.Write_uint32(st.PkgLen, 7)
 	if err != nil {
 		return err
 	}
@@ -1698,6 +1698,7 @@ type TestHistory struct {
 	Threads   uint32 `json:"threads"`
 	ConnCnt   uint32 `json:"connCnt"`
 	KeepAlive uint32 `json:"keepAlive"`
+	ReqFreq   uint32 `json:"reqFreq"`
 	PkgLen    uint32 `json:"pkgLen"`
 }
 
@@ -1757,7 +1758,12 @@ func (st *TestHistory) ReadFrom(_is *codec.Reader) error {
 		return err
 	}
 
-	err = _is.Read_uint32(&st.PkgLen, 9, true)
+	err = _is.Read_uint32(&st.ReqFreq, 9, true)
+	if err != nil {
+		return err
+	}
+
+	err = _is.Read_uint32(&st.PkgLen, 10, true)
 	if err != nil {
 		return err
 	}
@@ -1848,7 +1854,12 @@ func (st *TestHistory) WriteTo(_os *codec.Buffer) error {
 		return err
 	}
 
-	err = _os.Write_uint32(st.PkgLen, 9)
+	err = _os.Write_uint32(st.ReqFreq, 9)
+	if err != nil {
+		return err
+	}
+
+	err = _os.Write_uint32(st.PkgLen, 10)
 	if err != nil {
 		return err
 	}

@@ -32,14 +32,14 @@ func DoPerfTest(ctx context.Context, req *apitars.PerfTestReq) (apitars.PerfTest
 		return ret, tars.Errorf(errors.ErrCodeParam, "unsupported performance test for language:%s", lang)
 	}
 	// 更新服务线程数
-	err := prepareServerBeforeBM(ctx, serv, lang, int(req.ThreadCnt))
+	err := prepareServerBeforeBM(ctx, serv, lang, int(req.Threads))
 	if err != nil {
 		tars.GetLogger("").Errorf(err.Error())
 		return ret, err
 	}
 
 	// 开始压测
-	err = StartBM(ctx, serv, req.PackageLen, int32(req.ConnCnt), int32(req.ReqFreq), int32(req.KeepAlive))
+	err = StartBM(ctx, serv, req.PkgLen, int32(req.ConnCnt), int32(req.ReqFreq), int32(req.KeepAlive))
 	if err != nil {
 		ret.Code = uint32(tars.GetErrorCode(err))
 		ret.Msg = err.Error()
@@ -213,11 +213,11 @@ func newPerfTest(req *apitars.PerfTestReq, now time.Time) *mysql.PerfTests {
 		ServName:  constants.LangMap[strings.ToLower(req.Lang)],
 		FnName:    "ping",
 		Cores:     int(req.Cores),
-		Threads:   int(req.ThreadCnt),
+		Threads:   int(req.Threads),
 		ConnCnt:   int(req.ConnCnt),
 		Frequency: int(req.ReqFreq),
 		KeepAlive: int(req.KeepAlive),
-		PkgLen:    int(req.PackageLen),
+		PkgLen:    int(req.PkgLen),
 		StartTime: int(now.Unix()),
 		EndTime:   int(uint32(now.Unix()) + req.KeepAlive),
 	}
@@ -247,6 +247,7 @@ func QueryHistories(ctx context.Context, page, pageSize uint32) (int64, []apitar
 			EndTime:   uint32(row.EndTime),
 			ServType:  row.ServType,
 			Lang:      row.Lang,
+			ReqFreq:   uint32(row.Frequency),
 			Cores:     uint32(row.Cores),
 			Threads:   uint32(row.Threads),
 			ConnCnt:   uint32(row.ConnCnt),
