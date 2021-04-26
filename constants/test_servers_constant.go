@@ -6,11 +6,11 @@ const (
 	AppNameTestUnits = "TestUnits"
 
 	ServiceNameBMAdmin = "benchmark.AdminServer.AdminObj"
-	ServiceNameCpp     = "TestUnits.cpp.testObj"
-	ServiceNameGolang  = "TestUnits.golang.testObj"
-	ServiceNameJava    = "TestUnits.java.testObj"
-	ServiceNameNodeJs  = "TestUnits.nodejs.testObj"
-	ServiceNamePhp     = "TestUnits.php.testObj"
+	ServiceNameCpp     = "TestUnits.CppTars.testObj"
+	ServiceNameGolang  = "TestUnits.GolangTars.testObj"
+	ServiceNameJava    = "TestUnits.JavaTarstestObj"
+	ServiceNameNodeJs  = "TestUnits.NodejsTars.testObj"
+	ServiceNamePhp     = "TestUnits.PhpTars.testObj"
 
 	LangCpp    = "cpp"
 	LangGolang = "golang"
