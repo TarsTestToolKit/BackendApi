@@ -8,7 +8,7 @@ const (
 	ServiceNameBMAdmin = "benchmark.AdminServer.AdminObj"
 	ServiceNameCpp     = "TestUnits.CppTars.testObj"
 	ServiceNameGolang  = "TestUnits.GolangTars.testObj"
-	ServiceNameJava    = "TestUnits.JavaTarstestObj"
+	ServiceNameJava    = "TestUnits.JavaTars.testObj"
 	ServiceNameNodeJs  = "TestUnits.NodejsTars.testObj"
 	ServiceNamePhp     = "TestUnits.PhpTars.testObj"
 
