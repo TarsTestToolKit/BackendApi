@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"math"
+	"sort"
 	"strings"
 	"time"
 
@@ -275,6 +276,9 @@ func GetTestDetail(ctx context.Context, tid, timestamp uint32) (bool, []apitars.
 	for _, detail := range testDetail {
 		perfDetails = append(perfDetails, buildPerfTestDetailFromDB(detail))
 	}
+	sort.Slice(perfDetails, func(i, j int) bool {
+		return perfDetails[i].Timestamp < perfDetails[j].Timestamp
+	})
 
 	cpuStats, err := mysql.QueryCpuStats(tid)
 	if err != nil {
@@ -287,6 +291,10 @@ func GetTestDetail(ctx context.Context, tid, timestamp uint32) (bool, []apitars.
 		return status, nil, nil, err
 	}
 	resDetails := buildResDetailFromDB(cpuStats, memStats)
+	sort.Slice(resDetails, func(i, j int) bool {
+		return resDetails[i].Timestamp < resDetails[j].Timestamp
+	})
+
 
 	return status, perfDetails, resDetails, nil
 }
