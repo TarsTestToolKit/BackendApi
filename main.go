@@ -14,7 +14,7 @@ import (
 )
 
 func main() {
-	serveHttp()
+	serveTars()
 }
 
 func serveHttp() {
