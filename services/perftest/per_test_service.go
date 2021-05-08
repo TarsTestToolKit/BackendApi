@@ -23,7 +23,35 @@ import (
 	"github.com/TarsTestToolKit/BackendApi/tools/communicator"
 )
 
-// DoFuncTest 执行性能测试
+var RetMapDef = map[string]string{
+	"0":     "SUCCESS",
+	"-1":    "EXCEPTION",
+	"-101":  "INIT_PARAM_ERROR",
+	"-102":  "URL_ERROR",
+	"-1001": "PACKET_ENCODE_ERROR",
+	"-1002": "PACKET_DECODE_ERROR",
+	"-1003": "PACKET_PARAM_ERROR",
+	"-2000": "SOCK_ERROR",
+	"-2001": "SOCK_INVALID",
+	"-2003": "SOCK_CONN_ERROR",
+	"-2004": "SOCK_CONN_TIMEOUT",
+	"-2005": "SOCK_SEND_ERROR",
+	"-2006": "SOCK_RECV_ERROR",
+	"-2007": "SOCK_RECV_TIMEOUT",
+}
+
+var CostMapDef = map[string]string{
+	"0": "0~10ms",
+	"1": "10~30ms",
+	"2": "30~50ms",
+	"3": "50~100ms",
+	"4": "100~500ms",
+	"5": "0.5~3s",
+	"6": "3~5s",
+	"7": "5~100s",
+}
+
+// DoPerfTest 执行性能测试
 func DoPerfTest(ctx context.Context, req *apitars.PerfTestReq) (apitars.PerfTestResp, error) {
 	now := time.Now()
 	ret := apitars.PerfTestResp{Code: 0, Msg: "succ"}
@@ -295,7 +323,6 @@ func GetTestDetail(ctx context.Context, tid, timestamp uint32) (bool, []apitars.
 		return resDetails[i].Timestamp < resDetails[j].Timestamp
 	})
 
-
 	return status, perfDetails, resDetails, nil
 }
 
@@ -349,8 +376,21 @@ func buildPerfTestDetailFromDB(detail mysql.PerfTestDetail) apitars.PerfTestDeta
 		P999:       detail.P999,
 		SendByte:   uint32(detail.Send),
 		RecvByte:   uint32(detail.Recv),
-		CostMap:    retMap,
-		RetCodeMap: costMap,
+		CostMap:    make(map[string]uint32),
+		RetCodeMap: make(map[string]uint32),
+	}
+	for k, v := range costMap {
+		perfDetail.CostMap[CostMapDef[k]] = v
+	}
+	for k, v := range retMap {
+		if _, ok := RetMapDef[k]; !ok && v <= 0 {
+			continue
+		}
+		key := RetMapDef[k]
+		if key == "" {
+			key = k
+		}
+		perfDetail.RetCodeMap[key] = v
 	}
 
 	return perfDetail
