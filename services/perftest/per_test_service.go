@@ -49,6 +49,8 @@ var CostMapDef = map[string]string{
 	"5": "0.5~3s",
 	"6": "3~5s",
 	"7": "5~100s",
+	"8": "<100s",
+	"9": "<100s",
 }
 
 // DoPerfTest 执行性能测试
