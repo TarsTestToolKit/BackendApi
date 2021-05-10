@@ -5,12 +5,18 @@ import "time"
 const (
 	AppNameTestUnits = "TestUnits"
 
-	ServiceNameBMAdmin = "benchmark.AdminServer.AdminObj"
-	ServiceNameCpp     = "TestUnits.CppTars.testObj"
-	ServiceNameGolang  = "TestUnits.GolangTars.testObj"
-	ServiceNameJava    = "TestUnits.JavaTars.testObj"
-	ServiceNameNodeJs  = "TestUnits.NodejsTars.testObj"
-	ServiceNamePhp     = "TestUnits.PhpTars.testObj"
+	ServiceFullNameBMAdmin = "benchmark.AdminServer.AdminObj"
+	ServiceFullNameCpp     = "TestUnits.CppTars.testObj"
+	ServiceFullNameGolang  = "TestUnits.GolangTars.testObj"
+	ServiceFullNameJava    = "TestUnits.JavaTars.testObj"
+	ServiceFullNameNodeJs  = "TestUnits.NodejsTars.testObj"
+	ServiceFullNamePhp     = "TestUnits.PhpTars.testObj"
+
+	ServeNameCpp    = "CppTars"
+	ServeNameGolang = "GolangTars"
+	ServeNameJava   = "JavaTars"
+	ServeNameNodeJs = "NodejsTars"
+	ServeNamePhp    = "PhpTars"
 
 	LangCpp    = "cpp"
 	LangGolang = "golang"
@@ -31,9 +37,17 @@ const (
 )
 
 var LangMap = map[string]string{
-	LangCpp:    ServiceNameCpp,
-	LangGolang: ServiceNameGolang,
-	LangJava:   ServiceNameJava,
-	LangNodejs: ServiceNameNodeJs,
-	LangPHP:    ServiceNamePhp,
+	LangCpp:    ServiceFullNameCpp,
+	LangGolang: ServiceFullNameGolang,
+	LangJava:   ServiceFullNameJava,
+	LangNodejs: ServiceFullNameNodeJs,
+	LangPHP:    ServiceFullNamePhp,
+}
+
+var ServNameMap = map[string]string{
+	LangCpp:    ServeNameCpp,
+	LangGolang: ServeNameGolang,
+	LangJava:   ServeNameJava,
+	LangNodejs: ServeNameNodeJs,
+	LangPHP:    ServeNamePhp,
 }

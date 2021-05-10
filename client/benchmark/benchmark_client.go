@@ -14,7 +14,7 @@ import (
 func getAdminApp() *bm.Admin {
 	app := new(bm.Admin)
 	cmm := communicator.GetCommunicator()
-	cmm.StringToProxy(constants.ServiceNameBMAdmin, app)
+	cmm.StringToProxy(constants.ServiceFullNameBMAdmin, app)
 
 	return app
 }
@@ -70,7 +70,7 @@ func Startup(ctx context.Context, req *bm.BenchmarkUnit) error {
 
 // PingCpp ping cpp 服务
 func PingCpp(ctx context.Context) error {
-	ret := ping(ctx, constants.ServiceNameCpp)
+	ret := ping(ctx, constants.ServiceFullNameCpp)
 	if ret == errors.BmSucc {
 		return nil
 	}
@@ -80,7 +80,7 @@ func PingCpp(ctx context.Context) error {
 
 // PingJava ping java 服务
 func PingJava(ctx context.Context) error {
-	ret := ping(ctx, constants.ServiceNameJava)
+	ret := ping(ctx, constants.ServiceFullNameJava)
 	if ret == errors.BmSucc {
 		return nil
 	}
@@ -90,7 +90,7 @@ func PingJava(ctx context.Context) error {
 
 // PingGo ping golang 服务
 func PingGo(ctx context.Context) error {
-	ret := ping(ctx, constants.ServiceNameGolang)
+	ret := ping(ctx, constants.ServiceFullNameGolang)
 	if ret == errors.BmSucc {
 		return nil
 	}
@@ -100,7 +100,7 @@ func PingGo(ctx context.Context) error {
 
 // PingNodeJs ping nodejs 服务
 func PingNodeJs(ctx context.Context) error {
-	ret := ping(ctx, constants.ServiceNameNodeJs)
+	ret := ping(ctx, constants.ServiceFullNameNodeJs)
 	if ret == errors.BmSucc {
 		return nil
 	}
@@ -110,7 +110,7 @@ func PingNodeJs(ctx context.Context) error {
 
 // PingPhp ping php服务
 func PingPhp(ctx context.Context) error {
-	ret := ping(ctx, constants.ServiceNamePhp)
+	ret := ping(ctx, constants.ServiceFullNamePhp)
 	if ret == errors.BmSucc {
 		return nil
 	}

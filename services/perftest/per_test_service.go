@@ -103,7 +103,7 @@ func prepareServerBeforeBM(ctx context.Context, serv string, lang string, thread
 		tars.GetLogger("").Errorf(err.Error())
 		return err
 	}
-	taskNo, err := restartService(ctx, constants.AppNameTestUnits, lang)
+	taskNo, err := restartService(ctx, constants.AppNameTestUnits, constants.ServNameMap[lang])
 	if err != nil {
 		return err
 	}
