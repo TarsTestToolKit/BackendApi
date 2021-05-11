@@ -31,6 +31,7 @@ type DBConfigs struct {
 }
 
 var dbCfg *DBConfigs
+var dbMux = new(sync.Mutex)
 
 func init() {
 	r := new(sync.Once)
@@ -55,12 +56,16 @@ func loadDBCfg() {
 		if err != nil {
 			return
 		}
+		dbMux.Lock()
 		dbCfg = cfg
+		defer dbMux.Unlock()
 	}
 }
 
 // GetDBCfg 按配置名读取数据库配置
 func GetDBCfg(instName string) string {
+	dbMux.Lock()
+	defer dbMux.Unlock()
 	cfg, ok := dbCfg.Configs[instName]
 	if !ok {
 		loadDBCfg()
