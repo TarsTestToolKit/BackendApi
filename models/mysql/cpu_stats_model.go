@@ -21,6 +21,7 @@ func (m *CpuStats) Insert() (int64, error) {
 	if err != nil {
 		return 0, err
 	}
+	defer sess.Close()
 
 	return sess.Insert(m)
 }
@@ -31,6 +32,7 @@ func StoreStats(cpu []CpuStats, mem MemStats) error {
 	if err != nil {
 		return err
 	}
+	defer sess.Close()
 
 	if err := sess.Begin(); err != nil {
 		return err
@@ -56,6 +58,7 @@ func QueryCpuStats(tid uint32) ([]CpuStats, error) {
 	if err != nil {
 		return nil, err
 	}
+	defer sess.Close()
 
 	m := CpuStats{}
 	rows := make([]CpuStats, 0)

@@ -30,6 +30,7 @@ func (m *PerfTests) Insert() (int64, error) {
 	if err != nil {
 		return 0, err
 	}
+	defer sess.Close()
 
 	return sess.Insert(m)
 }
@@ -40,6 +41,7 @@ func PaginatePerfTests(page, pageSize uint32) (int64, []PerfTests, error) {
 	if err != nil {
 		return 0, nil, err
 	}
+	defer sess.Close()
 
 	model := PerfTests{}
 	rows := make([]PerfTests, 0)
@@ -56,6 +58,7 @@ func GetPerfTest(tid uint32) (*PerfTests, error) {
 	if err != nil {
 		return nil, err
 	}
+	defer sess.Close()
 
 	row := PerfTests{ID: int(tid)}
 	found, err := sess.Table(row).Get(&row)

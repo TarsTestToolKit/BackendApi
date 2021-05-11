@@ -27,6 +27,7 @@ func (m *MemStats) Insert() (int64, error) {
 	if err != nil {
 		return 0, err
 	}
+	defer sess.Close()
 
 	return sess.Insert(m)
 }
@@ -37,6 +38,7 @@ func QueryMemStats(tid uint32) ([]MemStats, error) {
 	if err != nil {
 		return nil, err
 	}
+	defer sess.Close()
 
 	m := MemStats{}
 	rows := make([]MemStats, 0)

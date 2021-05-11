@@ -40,6 +40,7 @@ func SetAdapterThread(adapterName string, thread int) error {
 	if err != nil {
 		return err
 	}
+	defer sess.Close()
 
 	m := &AdapterConf{}
 	_, err = sess.Table(m).

@@ -36,6 +36,7 @@ func (m *PerfTestDetail) Insert() (int64, error) {
 	if err != nil {
 		return 0, err
 	}
+	defer sess.Close()
 
 	return sess.Insert(m)
 }
@@ -46,6 +47,7 @@ func InsertTestDetail(m *PerfTestDetail, finished bool) error {
 	if err != nil {
 		return err
 	}
+	defer sess.Close()
 
 	err = sess.Begin()
 	if err != nil {
@@ -82,6 +84,7 @@ func QueryTestDetail(tid, timestamp uint32) ([]PerfTestDetail, error) {
 	if err != nil {
 		return nil, err
 	}
+	defer sess.Close()
 
 	m := PerfTestDetail{}
 	rows := make([]PerfTestDetail, 0)
