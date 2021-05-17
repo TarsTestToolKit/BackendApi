@@ -62,6 +62,7 @@ func DoPerfTest(ctx context.Context, req *apitars.PerfTestReq) (apitars.PerfTest
 	if !ok {
 		return ret, tars.Errorf(errors.ErrCodeParam, "unsupported performance test for language:%s", lang)
 	}
+	tars.GetLogger("").Debugf("starting prepare server for DoPerfTest. serv:%v", serv)
 	// 更新服务线程数
 	err := prepareServerBeforeBM(ctx, serv, lang, int(req.Threads))
 	if err != nil {
@@ -70,6 +71,7 @@ func DoPerfTest(ctx context.Context, req *apitars.PerfTestReq) (apitars.PerfTest
 	}
 
 	// 开始压测
+	tars.GetLogger("").Debugf("start benchmark:%v", serv)
 	err = StartBM(ctx, serv, req.PkgLen, int32(req.ConnCnt), int32(req.ReqFreq), int32(req.KeepAlive))
 	if err != nil {
 		ret.Code = uint32(tars.GetErrorCode(err))
@@ -103,13 +105,16 @@ func prepareServerBeforeBM(ctx context.Context, serv string, lang string, thread
 		tars.GetLogger("").Errorf(err.Error())
 		return err
 	}
+	tars.GetLogger("").Debugf("set thread:%v. serv:%v", threadCnt, serv)
 	taskNo, err := restartService(ctx, constants.AppNameTestUnits, constants.ServNameMap[lang])
 	if err != nil {
 		return err
 	}
+	tars.GetLogger("").Debugf("restart service:%v", constants.ServNameMap[lang])
 	ticker := time.NewTicker(time.Millisecond * 500)
 	for i := 0; i < 10; i++ {
 		finished, err := tarsweb.IsTaskFinished(ctx, taskNo)
+		tars.GetLogger("").Debugf("waiting service start:%v", constants.ServNameMap[lang])
 		if tars.GetErrorCode(err) == errors.ErrCodeInternalErr {
 			return err
 		}
