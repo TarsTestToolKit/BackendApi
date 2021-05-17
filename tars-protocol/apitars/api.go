@@ -1700,6 +1700,7 @@ type TestHistory struct {
 	KeepAlive uint32 `json:"keepAlive"`
 	ReqFreq   uint32 `json:"reqFreq"`
 	PkgLen    uint32 `json:"pkgLen"`
+	Finished  uint32 `json:"finished"`
 }
 
 func (st *TestHistory) ResetDefault() {
@@ -1764,6 +1765,11 @@ func (st *TestHistory) ReadFrom(_is *codec.Reader) error {
 	}
 
 	err = _is.Read_uint32(&st.PkgLen, 10, true)
+	if err != nil {
+		return err
+	}
+
+	err = _is.Read_uint32(&st.Finished, 11, true)
 	if err != nil {
 		return err
 	}
@@ -1860,6 +1866,11 @@ func (st *TestHistory) WriteTo(_os *codec.Buffer) error {
 	}
 
 	err = _os.Write_uint32(st.PkgLen, 10)
+	if err != nil {
+		return err
+	}
+
+	err = _os.Write_uint32(st.Finished, 11)
 	if err != nil {
 		return err
 	}

@@ -289,6 +289,7 @@ func QueryHistories(ctx context.Context, page, pageSize uint32) (int64, []apitar
 			ConnCnt:   uint32(row.ConnCnt),
 			KeepAlive: uint32(row.KeepAlive),
 			PkgLen:    uint32(row.PkgLen),
+			Finished:  uint32(row.Finished),
 		})
 	}
 
