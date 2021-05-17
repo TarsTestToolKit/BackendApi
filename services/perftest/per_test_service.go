@@ -337,31 +337,64 @@ func GetTestDetail(ctx context.Context, tid, timestamp uint32) (bool, []apitars.
 func buildResDetailFromDB(cpuStats []mysql.CpuStats, memStats []mysql.MemStats) []apitars.PerfResDetail {
 	cpuStatsMp := make(map[int64][]mysql.CpuStats)
 	memStatsMp := make(map[int64]mysql.MemStats)
+	timeSlice := make([]int64, 0)
 	for _, cpu := range cpuStats {
 		if _, ok := cpuStatsMp[cpu.CreateTime]; !ok {
 			cpuStatsMp[cpu.CreateTime] = make([]mysql.CpuStats, 0)
 		}
+		if !tools.InSlice(timeSlice, cpu.CreateTime) {
+			timeSlice = append(timeSlice, cpu.CreateTime)
+		}
 		cpuStatsMp[cpu.CreateTime] = append(cpuStatsMp[cpu.CreateTime], cpu)
 	}
+	sort.Slice(timeSlice, func(i, j int) bool {
+		return timeSlice[i] < timeSlice[j]
+	})
 	for _, mem := range memStats {
 		memStatsMp[mem.CreateTime] = mem
 	}
+
 	ret := make([]apitars.PerfResDetail, 0)
-	for ts, cpus := range cpuStatsMp {
+	for idx, ts := range timeSlice {
 		item := apitars.PerfResDetail{
 			Timestamp: uint32(ts),
-		}
-		for _, cpu := range cpus {
-			p := math.Round(float64(cpu.Used)/float64(cpu.Total)*100) / 100
-			item.Cpu = append(item.Cpu, apitars.CoreUsage{Percent: float32(p)})
 		}
 		mem := memStatsMp[ts]
 		item.Mem.Total = mem.Total
 		item.Mem.Used = mem.Used
+		if idx > 0 {
+			item.Cpu = buildCoresUsage(cpuStatsMp[ts], cpuStatsMp[timeSlice[idx-1]])
+		}
 		ret = append(ret, item)
+	}
+	// 补齐首次CPU占用
+	if len(ret) >= 2 {
+		ret[0].Cpu = ret[1].Cpu
 	}
 
 	return ret
+}
+
+func buildCoresUsage(cpus []mysql.CpuStats, cpusPrev []mysql.CpuStats) []apitars.CoreUsage {
+	if len(cpus) == 0 || len(cpusPrev) == 0 {
+		return nil
+	}
+	if len(cpus) != len(cpusPrev) {
+		return nil
+	}
+	cores := make([]apitars.CoreUsage, 0)
+	for i, cpu := range cpus {
+		cpuPrev := cpusPrev[i]
+		used := float64(cpu.Used - cpuPrev.Used)
+		total := float64(cpu.Total - cpuPrev.Total)
+		p := float64(1)
+		if total != 0 {
+			p = math.Round(used/total*100) / 100
+		}
+		cores = append(cores, apitars.CoreUsage{Percent: float32(p)})
+	}
+
+	return cores
 }
 
 func buildPerfTestDetailFromDB(detail mysql.PerfTestDetail) apitars.PerfTestDetail {

@@ -58,7 +58,7 @@ func loadDBCfg() {
 		}
 		dbMux.Lock()
 		dbCfg = cfg
-		defer dbMux.Unlock()
+		dbMux.Unlock()
 	}
 }
 

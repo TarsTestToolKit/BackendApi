@@ -24,7 +24,7 @@ const (
 	LangNodejs = "nodejs"
 	LangPHP    = "php"
 
-	CfgReloadDur = 5 * time.Second
+	CfgReloadDur = 30 * time.Second
 
 	ServiceNameResFetcher = "TarsTestToolKit.ResFetcher.fetcherObj"
 

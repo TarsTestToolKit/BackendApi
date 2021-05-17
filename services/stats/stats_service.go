@@ -52,7 +52,7 @@ func WatchStats(ctx context.Context, testID uint32, endTime time.Time) {
 }
 
 func doWatchStats(ctx context.Context, testID uint32, endTime time.Time) {
-	round := endTime.Unix() - time.Now().Unix()
+	round := (endTime.Unix()-time.Now().Unix())/5 + 1
 	ticker := time.NewTicker(time.Second * 5)
 	for i := 0; i < int(round); i++ {
 		select {
