@@ -3,6 +3,7 @@ package impl
 import (
 	"context"
 
+	"github.com/TarsCloud/TarsGo/tars"
 	"github.com/TarsTestToolKit/BackendApi/services/functest"
 	"github.com/TarsTestToolKit/BackendApi/services/perftest"
 	"github.com/TarsTestToolKit/BackendApi/tars-protocol/apitars"
@@ -26,15 +27,18 @@ func (imp *APIImpl) InitFramework(ctx context.Context) (ret apitars.SimpleResp, 
 }
 
 func (imp *APIImpl) DoPerfTest(tarsCtx context.Context, req *apitars.PerfTestReq) (ret apitars.PerfTestResp, err error) {
+	tars.GetLogger("").Debugf("request DoPerfTest:%+v", *req)
 	return perftest.DoPerfTest(tarsCtx, req)
 }
 
 func (imp *APIImpl) DoFuncTest(tarsCtx context.Context) (ret apitars.FuncTestResp, err error) {
+	tars.GetLogger("").Debugf("request DoFuncTest")
 	return functest.DoFuncTest(tarsCtx)
 }
 
 func (imp *APIImpl) GetTestDetail(tarsCtx context.Context, testID uint32, timestamp uint32) (
 	ret apitars.TestDetailResp, err error) {
+	tars.GetLogger("").Debugf("request GetTestDetail id:%v time:%v", testID, timestamp)
 	var finished = false
 	finished, ret.PerfDetail, ret.ResUsage, err = perftest.GetTestDetail(tarsCtx, testID, timestamp)
 	if err != nil {
@@ -51,6 +55,7 @@ func (imp *APIImpl) GetTestDetail(tarsCtx context.Context, testID uint32, timest
 }
 
 func (imp *APIImpl) GetTestHistories(tarsCtx context.Context, req *apitars.QueryTestHistoryReq) (ret apitars.QueryTestHistoryResp, err error) {
+	tars.GetLogger("").Debugf("request GetTestHistories req:%+v", *req)
 	total, perfTests, err := perftest.QueryHistories(tarsCtx, req.Page, req.PageSize)
 	ret.Total = uint32(total)
 	ret.Page = req.Page

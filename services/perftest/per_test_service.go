@@ -374,7 +374,7 @@ func buildPerfTestDetailFromDB(detail mysql.PerfTestDetail) apitars.PerfTestDeta
 		TotalReq:   uint32(detail.Total),
 		Succ:       uint32(detail.Succ),
 		Failed:     uint32(detail.Failed),
-		SuccRate:   fmt.Sprintf("%.2f", float64(detail.SuccRate)/100),
+		SuccRate:   fmt.Sprintf("%.2f", float64(detail.SuccRate)/100) + "%",
 		CostMax:    detail.CostMax,
 		CostMin:    detail.CostMin,
 		CostAvg:    detail.CostAvg,
