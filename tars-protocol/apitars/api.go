@@ -406,6 +406,7 @@ type PerfTestReq struct {
 	ReqFreq   uint32 `json:"reqFreq"`
 	KeepAlive uint32 `json:"keepAlive"`
 	PkgLen    uint32 `json:"pkgLen"`
+	Memo      string `json:"memo"`
 }
 
 func (st *PerfTestReq) ResetDefault() {
@@ -455,6 +456,11 @@ func (st *PerfTestReq) ReadFrom(_is *codec.Reader) error {
 	}
 
 	err = _is.Read_uint32(&st.PkgLen, 7, true)
+	if err != nil {
+		return err
+	}
+
+	err = _is.Read_string(&st.Memo, 8, false)
 	if err != nil {
 		return err
 	}
@@ -536,6 +542,11 @@ func (st *PerfTestReq) WriteTo(_os *codec.Buffer) error {
 	}
 
 	err = _os.Write_uint32(st.PkgLen, 7)
+	if err != nil {
+		return err
+	}
+
+	err = _os.Write_string(st.Memo, 8)
 	if err != nil {
 		return err
 	}
@@ -2061,6 +2072,201 @@ func (st *QueryTestHistoryResp) WriteTo(_os *codec.Buffer) error {
 
 //WriteBlock encode struct
 func (st *QueryTestHistoryResp) WriteBlock(_os *codec.Buffer, tag byte) error {
+	var err error
+	err = _os.WriteHead(codec.STRUCT_BEGIN, tag)
+	if err != nil {
+		return err
+	}
+
+	err = st.WriteTo(_os)
+	if err != nil {
+		return err
+	}
+
+	err = _os.WriteHead(codec.STRUCT_END, 0)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// IsPerfExistsReq struct implement
+type IsPerfExistsReq struct {
+	ServType string `json:"servType"`
+}
+
+func (st *IsPerfExistsReq) ResetDefault() {
+}
+
+//ReadFrom reads  from _is and put into struct.
+func (st *IsPerfExistsReq) ReadFrom(_is *codec.Reader) error {
+	var err error
+	var length int32
+	var have bool
+	var ty byte
+	st.ResetDefault()
+
+	err = _is.Read_string(&st.ServType, 0, true)
+	if err != nil {
+		return err
+	}
+
+	_ = err
+	_ = length
+	_ = have
+	_ = ty
+	return nil
+}
+
+//ReadBlock reads struct from the given tag , require or optional.
+func (st *IsPerfExistsReq) ReadBlock(_is *codec.Reader, tag byte, require bool) error {
+	var err error
+	var have bool
+	st.ResetDefault()
+
+	err, have = _is.SkipTo(codec.STRUCT_BEGIN, tag, require)
+	if err != nil {
+		return err
+	}
+	if !have {
+		if require {
+			return fmt.Errorf("require IsPerfExistsReq, but not exist. tag %d", tag)
+		}
+		return nil
+	}
+
+	err = st.ReadFrom(_is)
+	if err != nil {
+		return err
+	}
+
+	err = _is.SkipToStructEnd()
+	if err != nil {
+		return err
+	}
+	_ = have
+	return nil
+}
+
+//WriteTo encode struct to buffer
+func (st *IsPerfExistsReq) WriteTo(_os *codec.Buffer) error {
+	var err error
+
+	err = _os.Write_string(st.ServType, 0)
+	if err != nil {
+		return err
+	}
+
+	_ = err
+
+	return nil
+}
+
+//WriteBlock encode struct
+func (st *IsPerfExistsReq) WriteBlock(_os *codec.Buffer, tag byte) error {
+	var err error
+	err = _os.WriteHead(codec.STRUCT_BEGIN, tag)
+	if err != nil {
+		return err
+	}
+
+	err = st.WriteTo(_os)
+	if err != nil {
+		return err
+	}
+
+	err = _os.WriteHead(codec.STRUCT_END, 0)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// IsPerfExistsResp struct implement
+type IsPerfExistsResp struct {
+	Code uint32 `json:"code"`
+	Msg  string `json:"msg"`
+}
+
+func (st *IsPerfExistsResp) ResetDefault() {
+}
+
+//ReadFrom reads  from _is and put into struct.
+func (st *IsPerfExistsResp) ReadFrom(_is *codec.Reader) error {
+	var err error
+	var length int32
+	var have bool
+	var ty byte
+	st.ResetDefault()
+
+	err = _is.Read_uint32(&st.Code, 0, true)
+	if err != nil {
+		return err
+	}
+
+	err = _is.Read_string(&st.Msg, 1, true)
+	if err != nil {
+		return err
+	}
+
+	_ = err
+	_ = length
+	_ = have
+	_ = ty
+	return nil
+}
+
+//ReadBlock reads struct from the given tag , require or optional.
+func (st *IsPerfExistsResp) ReadBlock(_is *codec.Reader, tag byte, require bool) error {
+	var err error
+	var have bool
+	st.ResetDefault()
+
+	err, have = _is.SkipTo(codec.STRUCT_BEGIN, tag, require)
+	if err != nil {
+		return err
+	}
+	if !have {
+		if require {
+			return fmt.Errorf("require IsPerfExistsResp, but not exist. tag %d", tag)
+		}
+		return nil
+	}
+
+	err = st.ReadFrom(_is)
+	if err != nil {
+		return err
+	}
+
+	err = _is.SkipToStructEnd()
+	if err != nil {
+		return err
+	}
+	_ = have
+	return nil
+}
+
+//WriteTo encode struct to buffer
+func (st *IsPerfExistsResp) WriteTo(_os *codec.Buffer) error {
+	var err error
+
+	err = _os.Write_uint32(st.Code, 0)
+	if err != nil {
+		return err
+	}
+
+	err = _os.Write_string(st.Msg, 1)
+	if err != nil {
+		return err
+	}
+
+	_ = err
+
+	return nil
+}
+
+//WriteBlock encode struct
+func (st *IsPerfExistsResp) WriteBlock(_os *codec.Buffer, tag byte) error {
 	var err error
 	err = _os.WriteHead(codec.STRUCT_BEGIN, tag)
 	if err != nil {

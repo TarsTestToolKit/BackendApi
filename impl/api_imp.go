@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/TarsCloud/TarsGo/tars"
+	"github.com/TarsTestToolKit/BackendApi/constants/errors"
 	"github.com/TarsTestToolKit/BackendApi/services/functest"
 	"github.com/TarsTestToolKit/BackendApi/services/perftest"
 	"github.com/TarsTestToolKit/BackendApi/tars-protocol/apitars"
@@ -62,4 +63,21 @@ func (imp *APIImpl) GetTestHistories(tarsCtx context.Context, req *apitars.Query
 	ret.Histories = perfTests
 
 	return ret, err
+}
+
+func (imp *APIImpl) IsPerfExists(tarsCtx context.Context, req *apitars.IsPerfExistsReq) (ret apitars.IsPerfExistsResp, err error) {
+	tars.GetLogger("").Debugf("request IsPerfExists req:%+v", *req)
+	exists, err := perftest.IsPerfExists(tarsCtx, req.ServType)
+	if err != nil {
+		ret.Code = uint32(tars.GetErrorCode(err))
+		ret.Msg = err.Error()
+		return
+	}
+	if exists {
+		ret.Code = errors.ErrCodeDuplicatePerfTest
+		ret.Msg = "Duplicate Performance Test"
+		return
+	}
+
+	return
 }

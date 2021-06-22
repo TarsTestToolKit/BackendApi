@@ -272,6 +272,7 @@ func QueryHistories(ctx context.Context, page, pageSize uint32) (int64, []apitar
 	total, rows, err := mysql.PaginatePerfTests(page, pageSize)
 	if err != nil {
 		tars.GetLogger("").Errorf("failed to query perf_tests:%v", err)
+		err = tars.Errorf(errors.ErrMysqlQueryFailed, "failed to query perf_tests:%v", err.Error())
 		return 0, nil, err
 	}
 
@@ -296,6 +297,18 @@ func QueryHistories(ctx context.Context, page, pageSize uint32) (int64, []apitar
 	return total, histories, nil
 }
 
+// IsPerfExists 判断压测是否存在
+func IsPerfExists(ctx context.Context, servType string) (bool, error) {
+	perf, err := mysql.IsPerfExists(servType)
+	if err != nil {
+		tars.GetLogger("").Errorf("failed to query perf_tests:%v", err)
+		err = tars.Errorf(errors.ErrMysqlQueryFailed, "failed to query perf_tests:%v", err.Error())
+		return false, err
+	}
+
+	return perf, nil
+}
+
 // GetTestDetail 查询测试详情
 func GetTestDetail(ctx context.Context, tid, timestamp uint32) (bool, []apitars.PerfTestDetail, []apitars.PerfResDetail, error) {
 	test, err := mysql.GetPerfTest(tid)
@@ -306,6 +319,7 @@ func GetTestDetail(ctx context.Context, tid, timestamp uint32) (bool, []apitars.
 	testDetail, err := mysql.QueryTestDetail(tid, timestamp)
 	if err != nil {
 		tars.GetLogger("").Errorf("query test_detail for %v failed %v", tid, err)
+		err = tars.Errorf(errors.ErrMysqlQueryFailed, "query test_detail for %v failed %v", tid, err.Error())
 		return status, nil, nil, err
 	}
 	perfDetails := make([]apitars.PerfTestDetail, 0)
@@ -319,11 +333,13 @@ func GetTestDetail(ctx context.Context, tid, timestamp uint32) (bool, []apitars.
 	cpuStats, err := mysql.QueryCpuStats(tid)
 	if err != nil {
 		tars.GetLogger("").Errorf("query cpu_stats for %v failed %v", tid, err)
+		err = tars.Errorf(errors.ErrMysqlQueryFailed, "query cpu_stats for %v failed %v", tid, err.Error())
 		return status, nil, nil, err
 	}
 	memStats, err := mysql.QueryMemStats(tid)
 	if err != nil {
 		tars.GetLogger("").Errorf("query mem_stats for %v failed %v", tid, err)
+		err = tars.Errorf(errors.ErrMysqlQueryFailed, "query mem_stats for %v failed %v", tid, err.Error())
 		return status, nil, nil, err
 	}
 	resDetails := buildResDetailFromDB(cpuStats, memStats)

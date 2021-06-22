@@ -10,7 +10,8 @@ const (
 
 	ErrCodeInvalidResp = 4001 // 无效响应
 
-	ErrCodeCommon = 5000 // 一般错误
+	ErrCodeCommon            = 5000 // 一般错误
+	ErrCodeDuplicatePerfTest = 5001 // 重复的压测请求
 
 	BmSucc              = 0
 	BmSequence          = 1
