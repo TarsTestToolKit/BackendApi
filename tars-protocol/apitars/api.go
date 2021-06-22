@@ -407,6 +407,7 @@ type PerfTestReq struct {
 	KeepAlive uint32 `json:"keepAlive"`
 	PkgLen    uint32 `json:"pkgLen"`
 	Memo      string `json:"memo"`
+	WarmUp    uint32 `json:"warmUp"`
 }
 
 func (st *PerfTestReq) ResetDefault() {
@@ -461,6 +462,11 @@ func (st *PerfTestReq) ReadFrom(_is *codec.Reader) error {
 	}
 
 	err = _is.Read_string(&st.Memo, 8, false)
+	if err != nil {
+		return err
+	}
+
+	err = _is.Read_uint32(&st.WarmUp, 9, false)
 	if err != nil {
 		return err
 	}
@@ -547,6 +553,11 @@ func (st *PerfTestReq) WriteTo(_os *codec.Buffer) error {
 	}
 
 	err = _os.Write_string(st.Memo, 8)
+	if err != nil {
+		return err
+	}
+
+	err = _os.Write_uint32(st.WarmUp, 9)
 	if err != nil {
 		return err
 	}
@@ -1712,6 +1723,8 @@ type TestHistory struct {
 	ReqFreq   uint32 `json:"reqFreq"`
 	PkgLen    uint32 `json:"pkgLen"`
 	Finished  uint32 `json:"finished"`
+	Memo      string `json:"memo"`
+	WarmUp    uint32 `json:"warmUp"`
 }
 
 func (st *TestHistory) ResetDefault() {
@@ -1781,6 +1794,16 @@ func (st *TestHistory) ReadFrom(_is *codec.Reader) error {
 	}
 
 	err = _is.Read_uint32(&st.Finished, 11, true)
+	if err != nil {
+		return err
+	}
+
+	err = _is.Read_string(&st.Memo, 12, false)
+	if err != nil {
+		return err
+	}
+
+	err = _is.Read_uint32(&st.WarmUp, 13, false)
 	if err != nil {
 		return err
 	}
@@ -1882,6 +1905,16 @@ func (st *TestHistory) WriteTo(_os *codec.Buffer) error {
 	}
 
 	err = _os.Write_uint32(st.Finished, 11)
+	if err != nil {
+		return err
+	}
+
+	err = _os.Write_string(st.Memo, 12)
+	if err != nil {
+		return err
+	}
+
+	err = _os.Write_uint32(st.WarmUp, 13)
 	if err != nil {
 		return err
 	}

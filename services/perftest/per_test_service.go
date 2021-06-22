@@ -256,6 +256,8 @@ func newPerfTest(req *apitars.PerfTestReq, now time.Time) *mysql.PerfTests {
 		PkgLen:    int(req.PkgLen),
 		StartTime: int(now.Unix()),
 		EndTime:   int(uint32(now.Unix()) + req.KeepAlive),
+		Memo:      req.Memo,
+		WarmUp:    int(req.WarmUp),
 	}
 
 	return row
@@ -284,13 +286,15 @@ func QueryHistories(ctx context.Context, page, pageSize uint32) (int64, []apitar
 			EndTime:   uint32(row.EndTime),
 			ServType:  row.ServType,
 			Lang:      row.Lang,
-			ReqFreq:   uint32(row.Frequency),
 			Cores:     uint32(row.Cores),
 			Threads:   uint32(row.Threads),
 			ConnCnt:   uint32(row.ConnCnt),
 			KeepAlive: uint32(row.KeepAlive),
+			ReqFreq:   uint32(row.Frequency),
 			PkgLen:    uint32(row.PkgLen),
 			Finished:  uint32(row.Finished),
+			Memo:      row.Memo,
+			WarmUp:    uint32(row.WarmUp),
 		})
 	}
 
@@ -326,8 +330,9 @@ func GetTestDetail(ctx context.Context, tid, timestamp uint32) (bool, []apitars.
 	for _, detail := range testDetail {
 		perfDetails = append(perfDetails, buildPerfTestDetailFromDB(detail))
 	}
-	if len(perfDetails) >= 12 && timestamp == 0 {
-		perfDetails = perfDetails[6:]
+	l := test.WarmUp / 5
+	if l > 0 && len(perfDetails) >= 2*l && timestamp == 0 {
+		perfDetails = perfDetails[l:]
 	}
 	sort.Slice(perfDetails, func(i, j int) bool {
 		return perfDetails[i].Timestamp < perfDetails[j].Timestamp

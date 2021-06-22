@@ -18,6 +18,7 @@ type PerfTests struct {
 	EndTime   int    `xorm:"end_time not null comment('结束时间') INT(10)"`
 	Finished  int    `xorm:"finished not null default 0 comment('') TINYINT(1)"`
 	Memo      string `xorm:"memo comment('备注') TEXT"`
+	WarmUp    int    `xorm:"warm_up not null default 0 comment('预热时间(s)') INT(10)"`
 }
 
 // TableName 获取数据库对应表名
