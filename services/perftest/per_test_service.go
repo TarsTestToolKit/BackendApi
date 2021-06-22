@@ -326,6 +326,9 @@ func GetTestDetail(ctx context.Context, tid, timestamp uint32) (bool, []apitars.
 	for _, detail := range testDetail {
 		perfDetails = append(perfDetails, buildPerfTestDetailFromDB(detail))
 	}
+	if len(perfDetails) >= 12 && timestamp == 0 {
+		perfDetails = perfDetails[6:]
+	}
 	sort.Slice(perfDetails, func(i, j int) bool {
 		return perfDetails[i].Timestamp < perfDetails[j].Timestamp
 	})
