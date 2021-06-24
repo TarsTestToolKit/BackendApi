@@ -128,8 +128,8 @@ type FuncTestDetail struct {
 	From      string `json:"from"`
 	To        string `json:"to"`
 	IsSucc    bool   `json:"isSucc"`
-	StartTime uint32 `json:"startTime"`
-	EndTime   uint32 `json:"endTime"`
+	StartTime int64  `json:"startTime"`
+	EndTime   int64  `json:"endTime"`
 }
 
 func (st *FuncTestDetail) ResetDefault() {
@@ -158,12 +158,12 @@ func (st *FuncTestDetail) ReadFrom(_is *codec.Reader) error {
 		return err
 	}
 
-	err = _is.Read_uint32(&st.StartTime, 3, true)
+	err = _is.Read_int64(&st.StartTime, 3, true)
 	if err != nil {
 		return err
 	}
 
-	err = _is.Read_uint32(&st.EndTime, 4, true)
+	err = _is.Read_int64(&st.EndTime, 4, true)
 	if err != nil {
 		return err
 	}
@@ -224,12 +224,12 @@ func (st *FuncTestDetail) WriteTo(_os *codec.Buffer) error {
 		return err
 	}
 
-	err = _os.Write_uint32(st.StartTime, 3)
+	err = _os.Write_int64(st.StartTime, 3)
 	if err != nil {
 		return err
 	}
 
-	err = _os.Write_uint32(st.EndTime, 4)
+	err = _os.Write_int64(st.EndTime, 4)
 	if err != nil {
 		return err
 	}
@@ -264,8 +264,8 @@ type FuncTestResp struct {
 	Code      uint32           `json:"code"`
 	Msg       string           `json:"msg"`
 	Rows      []FuncTestDetail `json:"rows"`
-	StartTime uint32           `json:"startTime"`
-	EndTime   uint32           `json:"endTime"`
+	StartTime int64            `json:"startTime"`
+	EndTime   int64            `json:"endTime"`
 }
 
 func (st *FuncTestResp) ResetDefault() {
@@ -325,12 +325,12 @@ func (st *FuncTestResp) ReadFrom(_is *codec.Reader) error {
 		}
 	}
 
-	err = _is.Read_uint32(&st.StartTime, 3, true)
+	err = _is.Read_int64(&st.StartTime, 3, true)
 	if err != nil {
 		return err
 	}
 
-	err = _is.Read_uint32(&st.EndTime, 4, true)
+	err = _is.Read_int64(&st.EndTime, 4, true)
 	if err != nil {
 		return err
 	}
@@ -405,12 +405,12 @@ func (st *FuncTestResp) WriteTo(_os *codec.Buffer) error {
 
 	}
 
-	err = _os.Write_uint32(st.StartTime, 3)
+	err = _os.Write_int64(st.StartTime, 3)
 	if err != nil {
 		return err
 	}
 
-	err = _os.Write_uint32(st.EndTime, 4)
+	err = _os.Write_int64(st.EndTime, 4)
 	if err != nil {
 		return err
 	}

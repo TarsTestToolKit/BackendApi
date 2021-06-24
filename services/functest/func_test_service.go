@@ -28,19 +28,19 @@ func DoFuncTest(ctx context.Context) (apitars.FuncTestResp, error) {
 		Code:      0,
 		Msg:       "succ",
 		Rows:      make([]apitars.FuncTestDetail, 0),
-		StartTime: uint32(start.UnixNano() / int64(time.Millisecond)),
+		StartTime: start.UnixNano() / int64(time.Millisecond),
 	}
 	for result := range ch {
 		row := apitars.FuncTestDetail{
 			From:      "cpp",
 			To:        result.Lang,
 			IsSucc:    result.Ret == nil,
-			StartTime: uint32(start.UnixNano() / int64(time.Millisecond)),
-			EndTime:   uint32(time.Now().UnixNano() / int64(time.Millisecond)),
+			StartTime: start.UnixNano() / int64(time.Millisecond),
+			EndTime:   time.Now().UnixNano() / int64(time.Millisecond),
 		}
 		resp.Rows = append(resp.Rows, row)
 	}
-	resp.EndTime = uint32(time.Now().UnixNano() / int64(time.Millisecond))
+	resp.EndTime = time.Now().UnixNano() / int64(time.Millisecond)
 
 	return resp, nil
 }
