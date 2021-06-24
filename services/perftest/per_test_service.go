@@ -168,6 +168,7 @@ func FetchBM(ctx context.Context, tid uint32, serv string, fn string, doneCh cha
 	}
 	result, err := benchmark.Query(ctx, unit)
 	errCode := tars.GetErrorCode(err)
+	tars.GetLogger("").Debugf("benchmark.Query resp:%+v err:%+v code:%v", result, err, errCode)
 	finished := errCode == errors.BmAdminErrNotfind || errCode == errors.BmAdminErrRunning
 	if err != nil && !finished {
 		return
