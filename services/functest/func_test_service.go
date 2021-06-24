@@ -24,56 +24,48 @@ func DoFuncTest(ctx context.Context) (apitars.FuncTestResp, error) {
 	go pingPhp(ctx, wg, ch)
 	wg.Wait()
 	close(ch)
-	end := time.Now()
 	resp := apitars.FuncTestResp{
 		Code:      0,
 		Msg:       "succ",
 		Rows:      make([]apitars.FuncTestDetail, 0),
 		StartTime: uint32(start.UnixNano() / int64(time.Millisecond)),
-		EndTime:   uint32(end.UnixNano() / int64(time.Millisecond)),
 	}
 	for result := range ch {
 		row := apitars.FuncTestDetail{
-			From:   "cpp",
-			To:     result.Lang,
-			IsSucc: result.Ret == nil,
+			From:      "cpp",
+			To:        result.Lang,
+			IsSucc:    result.Ret == nil,
+			StartTime: uint32(start.UnixNano() / int64(time.Millisecond)),
+			EndTime:   uint32(time.Now().UnixNano() / int64(time.Millisecond)),
 		}
 		resp.Rows = append(resp.Rows, row)
 	}
+	resp.EndTime = uint32(time.Now().UnixNano() / int64(time.Millisecond))
 
 	return resp, nil
 }
 
 func pingCpp(ctx context.Context, wg *sync.WaitGroup, ch chan<- *data.FuncTestResult) {
 	defer wg.Done()
-	start := time.Now()
 	ch <- &data.FuncTestResult{
-		Lang:  "cpp",
-		Ret:   benchmark.PingCpp(ctx),
-		Start: start,
-		End:   time.Now(),
+		Lang: "cpp",
+		Ret:  benchmark.PingCpp(ctx),
 	}
 }
 
 func pingJava(ctx context.Context, wg *sync.WaitGroup, ch chan<- *data.FuncTestResult) {
 	defer wg.Done()
-	start := time.Now()
 	ch <- &data.FuncTestResult{
-		Lang:  "java",
-		Ret:   benchmark.PingJava(ctx),
-		Start: start,
-		End:   time.Now(),
+		Lang: "java",
+		Ret:  benchmark.PingJava(ctx),
 	}
 }
 
 func pingGo(ctx context.Context, wg *sync.WaitGroup, ch chan<- *data.FuncTestResult) {
 	defer wg.Done()
-	start := time.Now()
 	ch <- &data.FuncTestResult{
-		Lang:  "golang",
-		Ret:   benchmark.PingGo(ctx),
-		Start: start,
-		End:   time.Now(),
+		Lang: "golang",
+		Ret:  benchmark.PingGo(ctx),
 	}
 }
 
