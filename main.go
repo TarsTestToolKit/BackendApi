@@ -6,7 +6,6 @@ import (
 
 	"github.com/TarsCloud/TarsGo/tars"
 
-	"github.com/TarsTestToolKit/BackendApi/controllers"
 	"github.com/TarsTestToolKit/BackendApi/impl"
 	"github.com/TarsTestToolKit/BackendApi/tars-protocol/apitars"
 
@@ -15,19 +14,6 @@ import (
 
 func main() {
 	serveTars()
-}
-
-func serveHttp() {
-	mux := &tars.TarsHttpMux{}
-	// New servant
-	mux.HandleFunc("/testFunc", controllers.HandleDoFuncTest)        // 执行功能测试
-	mux.HandleFunc("/testPerf", controllers.HandleDoPerfTest)        // 执行性能测试
-	mux.HandleFunc("/detail", controllers.HandleGetTestDetail)       // 获取测试详情
-	mux.HandleFunc("/histories", controllers.HandleGetTestHistories) // 获取历史测试列表
-
-	cfg := tars.GetServerConfig()
-	tars.AddHttpServant(mux, cfg.App+"."+cfg.Server+".apiObj") //Register http server
-	tars.Run()
 }
 
 func serveTars() {
