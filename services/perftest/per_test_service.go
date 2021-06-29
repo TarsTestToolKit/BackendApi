@@ -331,20 +331,19 @@ func GetTestDetail(ctx context.Context, tid, timestamp uint32, showWarmUp bool) 
 		err = tars.Errorf(errors.ErrMysqlQueryFailed, "query test_detail for %v failed %v", tid, err.Error())
 		return status, nil, nil, err
 	}
-	perfDetails := make([]apitars.PerfTestDetail, 0)
-	for _, detail := range testDetail {
-		perfDetails = append(perfDetails, buildPerfTestDetailFromDB(detail))
-	}
-	l := test.WarmUp / 5
+	start := time.Unix(int64(test.StartTime), 0)
 	if !showWarmUp {
-		start := time.Unix(int64(test.StartTime), 0)
 		if time.Now().Before(start.Add(time.Duration(test.WarmUp) * time.Second)) {
 			err = tars.Errorf(errors.ErrCodeWarmingUp, "warming up")
 			return status, nil, nil, err
 		}
-		if l > 0 && len(perfDetails) >= 2*l && timestamp == 0 {
-			perfDetails = perfDetails[l:]
+	}
+	perfDetails := make([]apitars.PerfTestDetail, 0)
+	for _, detail := range testDetail {
+		if int64(detail.CreateTime) < start.Unix() && !showWarmUp {
+			continue
 		}
+		perfDetails = append(perfDetails, buildPerfTestDetailFromDB(detail))
 	}
 
 	sort.Slice(perfDetails, func(i, j int) bool {
