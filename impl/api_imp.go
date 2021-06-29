@@ -39,7 +39,7 @@ func (imp *APIImpl) DoFuncTest(tarsCtx context.Context) (ret apitars.FuncTestRes
 
 func (imp *APIImpl) GetTestDetail(tarsCtx context.Context, testID uint32, timestamp uint32, showWarmUp bool) (
 	ret apitars.TestDetailResp, err error) {
-	tars.GetLogger("").Debugf("request GetTestDetail id:%v time:%v", testID, timestamp)
+	tars.GetLogger("").Debugf("request GetTestDetail id:%v time:%v showWarmUp:%v", testID, timestamp, showWarmUp)
 	var finished = false
 	finished, ret.PerfDetail, ret.ResUsage, err = perftest.GetTestDetail(tarsCtx, testID, timestamp, showWarmUp)
 	if err != nil {
