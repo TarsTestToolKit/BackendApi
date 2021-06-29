@@ -55,8 +55,11 @@ var CostMapDef = map[string]string{
 
 // DoPerfTest 执行性能测试
 func DoPerfTest(ctx context.Context, req *apitars.PerfTestReq) (apitars.PerfTestResp, error) {
-	now := time.Now()
 	ret := apitars.PerfTestResp{Code: 0, Msg: "succ"}
+	if req.WarmUp >= req.KeepAlive {
+		return ret, tars.Errorf(errors.ErrCodeParam, "warmUp must be greater than keepAlive")
+	}
+	now := time.Now()
 	lang := strings.ToLower(req.Lang)
 	serv, ok := constants.LangMap[lang]
 	if !ok {
@@ -315,7 +318,8 @@ func IsPerfExists(ctx context.Context, servType string) (bool, error) {
 }
 
 // GetTestDetail 查询测试详情
-func GetTestDetail(ctx context.Context, tid, timestamp uint32) (bool, []apitars.PerfTestDetail, []apitars.PerfResDetail, error) {
+func GetTestDetail(ctx context.Context, tid, timestamp uint32, showWarmUp bool) (
+	bool, []apitars.PerfTestDetail, []apitars.PerfResDetail, error) {
 	test, err := mysql.GetPerfTest(tid)
 	if err != nil {
 		return false, nil, nil, err
@@ -332,9 +336,17 @@ func GetTestDetail(ctx context.Context, tid, timestamp uint32) (bool, []apitars.
 		perfDetails = append(perfDetails, buildPerfTestDetailFromDB(detail))
 	}
 	l := test.WarmUp / 5
-	if l > 0 && len(perfDetails) >= 2*l && timestamp == 0 {
-		perfDetails = perfDetails[l:]
+	if !showWarmUp {
+		start := time.Unix(int64(test.StartTime), 0)
+		if time.Now().Before(start.Add(time.Duration(test.WarmUp) * time.Second)) {
+			err = tars.Errorf(errors.ErrCodeWarmingUp, "warming up")
+			return status, nil, nil, err
+		}
+		if l > 0 && len(perfDetails) >= 2*l && timestamp == 0 {
+			perfDetails = perfDetails[l:]
+		}
 	}
+
 	sort.Slice(perfDetails, func(i, j int) bool {
 		return perfDetails[i].Timestamp < perfDetails[j].Timestamp
 	})

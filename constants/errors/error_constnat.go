@@ -12,6 +12,7 @@ const (
 
 	ErrCodeCommon            = 5000 // 一般错误
 	ErrCodeDuplicatePerfTest = 5001 // 重复的压测请求
+	ErrCodeWarmingUp         = 5002 // 压测正在预热
 
 	BmSucc              = 0
 	BmSequence          = 1

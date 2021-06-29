@@ -373,7 +373,7 @@ func (_obj *Api) DoPerfTestOneWayWithContext(tarsCtx context.Context, req *PerfT
 }
 
 //GetTestDetail is the proxy function for the method defined in the tars file, with the context
-func (_obj *Api) GetTestDetail(testID uint32, timestamp uint32, _opt ...map[string]string) (ret TestDetailResp, err error) {
+func (_obj *Api) GetTestDetail(testID uint32, timestamp uint32, showWarmUp bool, _opt ...map[string]string) (ret TestDetailResp, err error) {
 
 	var length int32
 	var have bool
@@ -385,6 +385,11 @@ func (_obj *Api) GetTestDetail(testID uint32, timestamp uint32, _opt ...map[stri
 	}
 
 	err = _os.Write_uint32(timestamp, 2)
+	if err != nil {
+		return ret, err
+	}
+
+	err = _os.Write_bool(showWarmUp, 3)
 	if err != nil {
 		return ret, err
 	}
@@ -440,7 +445,7 @@ func (_obj *Api) GetTestDetail(testID uint32, timestamp uint32, _opt ...map[stri
 }
 
 //GetTestDetailWithContext is the proxy function for the method defined in the tars file, with the context
-func (_obj *Api) GetTestDetailWithContext(tarsCtx context.Context, testID uint32, timestamp uint32, _opt ...map[string]string) (ret TestDetailResp, err error) {
+func (_obj *Api) GetTestDetailWithContext(tarsCtx context.Context, testID uint32, timestamp uint32, showWarmUp bool, _opt ...map[string]string) (ret TestDetailResp, err error) {
 
 	var length int32
 	var have bool
@@ -452,6 +457,11 @@ func (_obj *Api) GetTestDetailWithContext(tarsCtx context.Context, testID uint32
 	}
 
 	err = _os.Write_uint32(timestamp, 2)
+	if err != nil {
+		return ret, err
+	}
+
+	err = _os.Write_bool(showWarmUp, 3)
 	if err != nil {
 		return ret, err
 	}
@@ -506,7 +516,7 @@ func (_obj *Api) GetTestDetailWithContext(tarsCtx context.Context, testID uint32
 }
 
 //GetTestDetailOneWayWithContext is the proxy function for the method defined in the tars file, with the context
-func (_obj *Api) GetTestDetailOneWayWithContext(tarsCtx context.Context, testID uint32, timestamp uint32, _opt ...map[string]string) (ret TestDetailResp, err error) {
+func (_obj *Api) GetTestDetailOneWayWithContext(tarsCtx context.Context, testID uint32, timestamp uint32, showWarmUp bool, _opt ...map[string]string) (ret TestDetailResp, err error) {
 
 	var length int32
 	var have bool
@@ -518,6 +528,11 @@ func (_obj *Api) GetTestDetailOneWayWithContext(tarsCtx context.Context, testID 
 	}
 
 	err = _os.Write_uint32(timestamp, 2)
+	if err != nil {
+		return ret, err
+	}
+
+	err = _os.Write_bool(showWarmUp, 3)
 	if err != nil {
 		return ret, err
 	}
@@ -949,14 +964,14 @@ func (_obj *Api) AddServantWithContext(imp _impApiWithContext, obj string) {
 type _impApi interface {
 	DoFuncTest() (ret FuncTestResp, err error)
 	DoPerfTest(req *PerfTestReq) (ret PerfTestResp, err error)
-	GetTestDetail(testID uint32, timestamp uint32) (ret TestDetailResp, err error)
+	GetTestDetail(testID uint32, timestamp uint32, showWarmUp bool) (ret TestDetailResp, err error)
 	GetTestHistories(req *QueryTestHistoryReq) (ret QueryTestHistoryResp, err error)
 	IsPerfExists(req *IsPerfExistsReq) (ret IsPerfExistsResp, err error)
 }
 type _impApiWithContext interface {
 	DoFuncTest(tarsCtx context.Context) (ret FuncTestResp, err error)
 	DoPerfTest(tarsCtx context.Context, req *PerfTestReq) (ret PerfTestResp, err error)
-	GetTestDetail(tarsCtx context.Context, testID uint32, timestamp uint32) (ret TestDetailResp, err error)
+	GetTestDetail(tarsCtx context.Context, testID uint32, timestamp uint32, showWarmUp bool) (ret TestDetailResp, err error)
 	GetTestHistories(tarsCtx context.Context, req *QueryTestHistoryReq) (ret QueryTestHistoryResp, err error)
 	IsPerfExists(tarsCtx context.Context, req *IsPerfExistsReq) (ret IsPerfExistsResp, err error)
 }
@@ -1121,6 +1136,7 @@ func (_obj *Api) Dispatch(tarsCtx context.Context, _val interface{}, tarsReq *re
 	case "getTestDetail":
 		var testID uint32
 		var timestamp uint32
+		var showWarmUp bool
 
 		if tarsReq.IVersion == basef.TARSVERSION {
 
@@ -1130,6 +1146,11 @@ func (_obj *Api) Dispatch(tarsCtx context.Context, _val interface{}, tarsReq *re
 			}
 
 			err = _is.Read_uint32(&timestamp, 2, true)
+			if err != nil {
+				return err
+			}
+
+			err = _is.Read_bool(&showWarmUp, 3, true)
 			if err != nil {
 				return err
 			}
@@ -1154,6 +1175,13 @@ func (_obj *Api) Dispatch(tarsCtx context.Context, _val interface{}, tarsReq *re
 				return err
 			}
 
+			_reqTup_.GetBuffer("showWarmUp", &_tupBuffer_)
+			_is.Reset(_tupBuffer_)
+			err = _is.Read_bool(&showWarmUp, 0, true)
+			if err != nil {
+				return err
+			}
+
 		} else if tarsReq.IVersion == basef.JSONVERSION {
 			var _jsonDat_ map[string]interface{}
 			_decoder_ := json.NewDecoder(bytes.NewReader(_is.ToBytes()))
@@ -1174,6 +1202,12 @@ func (_obj *Api) Dispatch(tarsCtx context.Context, _val interface{}, tarsReq *re
 					return err
 				}
 			}
+			{
+				_jsonStr_, _ := json.Marshal(_jsonDat_["showWarmUp"])
+				if err = json.Unmarshal([]byte(_jsonStr_), &showWarmUp); err != nil {
+					return err
+				}
+			}
 
 		} else {
 			err = fmt.Errorf("Decode reqpacket fail, error version: %d", tarsReq.IVersion)
@@ -1183,10 +1217,10 @@ func (_obj *Api) Dispatch(tarsCtx context.Context, _val interface{}, tarsReq *re
 		var _funRet_ TestDetailResp
 		if _withContext == false {
 			_imp := _val.(_impApi)
-			_funRet_, err = _imp.GetTestDetail(testID, timestamp)
+			_funRet_, err = _imp.GetTestDetail(testID, timestamp, showWarmUp)
 		} else {
 			_imp := _val.(_impApiWithContext)
-			_funRet_, err = _imp.GetTestDetail(tarsCtx, testID, timestamp)
+			_funRet_, err = _imp.GetTestDetail(tarsCtx, testID, timestamp, showWarmUp)
 		}
 
 		if err != nil {
