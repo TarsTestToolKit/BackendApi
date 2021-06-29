@@ -325,22 +325,25 @@ func GetTestDetail(ctx context.Context, tid, timestamp uint32, showWarmUp bool) 
 		return false, nil, nil, err
 	}
 	status := test.Finished == 1
+	start := time.Unix(int64(test.StartTime), 0)
+	now := time.Now()
+	warming := start.Add(time.Duration(test.WarmUp) * time.Second)
+	if !showWarmUp {
+		if now.Before(warming) {
+			err = tars.Errorf(errors.ErrCodeWarmingUp, "warming up")
+			return status, nil, nil, err
+		}
+	}
 	testDetail, err := mysql.QueryTestDetail(tid, timestamp)
 	if err != nil {
 		tars.GetLogger("").Errorf("query test_detail for %v failed %v", tid, err)
 		err = tars.Errorf(errors.ErrMysqlQueryFailed, "query test_detail for %v failed %v", tid, err.Error())
 		return status, nil, nil, err
 	}
-	start := time.Unix(int64(test.StartTime), 0)
-	if !showWarmUp {
-		if time.Now().Before(start.Add(time.Duration(test.WarmUp) * time.Second)) {
-			err = tars.Errorf(errors.ErrCodeWarmingUp, "warming up")
-			return status, nil, nil, err
-		}
-	}
+
 	perfDetails := make([]apitars.PerfTestDetail, 0)
 	for _, detail := range testDetail {
-		if int64(detail.CreateTime) < start.Unix() && !showWarmUp {
+		if int64(detail.CreateTime) < warming.Unix() && !showWarmUp {
 			continue
 		}
 		perfDetails = append(perfDetails, buildPerfTestDetailFromDB(detail))
